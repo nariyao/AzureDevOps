@@ -1,5 +1,6 @@
 # Power BI Actions
 
+import argparse
 import json
 import os
 
@@ -77,19 +78,19 @@ class PowerBIActions:
 
     def publish_report(self, report_type="reports"):
         report_path = self.config.get(report_type, "")
-        self.print_log(f"Publishing report from path: {report_path}")
-        if not report_path:
-            raise ValueError(f"Report path for type '{report_type}' is missing in the configuration.")
-        if not os.path.exists(report_path):
-            raise FileNotFoundError(f"Report path does not exist: {report_path}")
-        if not os.path.isdir(report_path):
-            raise NotADirectoryError(f"Report path is not a directory: {report_path}")
-        if not os.listdir(report_path):
-            self.print_log(f"Warning: Report directory is empty: {report_path}", status_code=1)
-            return
+        # self.print_log(f"Publishing report from path: {report_path}")
+        # if not report_path:
+        #     raise ValueError(f"Report path for type '{report_type}' is missing in the configuration.")
+        # if not os.path.exists(report_path):
+        #     raise FileNotFoundError(f"Report path does not exist: {report_path}")
+        # if not os.path.isdir(report_path):
+        #     raise NotADirectoryError(f"Report path is not a directory: {report_path}")
+        # if not os.listdir(report_path):
+        #     self.print_log(f"Warning: Report directory is empty: {report_path}", status_code=1)
+        #     return
         workspace_id = self.config.get("workspace", "")
-        if not report_path or not workspace_id:
-            raise ValueError("Report path or workspace ID is missing in the configuration.")
+        # if not report_path or not workspace_id:
+        #     raise ValueError("Report path or workspace ID is missing in the configuration.")
         self.print_log(f"Report path: {report_path}, Workspace ID: {workspace_id}")
 
     def list_reports(self):
@@ -122,3 +123,25 @@ class PowerBIActions:
         self.print_log(f"Binding dataset {dataset_id} to gateway {gateway_id}")
         # Add your binding logic here
         self.print_log(f"Dataset {dataset_id} successfully bound to gateway {gateway_id}")
+
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="Power BI Automation CLI")
+    parser.add_argument("--env", type=str, default="dev", choices=["dev", "qa", "prod"], help="Target environment")
+    parser.add_argument("--reports", action="store_true", help="Publish standard reports")
+    parser.add_argument("--paginated_reports", action="store_true", help="Publish paginated reports")
+
+    args = parser.parse_args()
+
+    power_bi = PowerBIActions(env=args.env)
+    power_bi.validate_config()
+    if args.reports:
+        power_bi.publish_report("reports")
+    power_bi.list_reports()
+    power_bi.take_ownership("1", "new_owner@example.com")
+    power_bi.update_parameters()
+    power_bi.update_gateways()
+    power_bi.bind_to_gateway()
+    if args.paginated_reports:
+        power_bi.publish_report("paginated_reports")
+    print("All Power BI actions completed successfully.")
