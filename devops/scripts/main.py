@@ -23,7 +23,23 @@ class PowerBIActions:
         self.config = self.get_config("../configs/powerbi_config.json")
         self.authenticate()
 
+    def validate_config(self):
+        required_keys = ["workspace", "report_id", "dataset_id", "gateway_id"]
+        missing_keys = [key for key in required_keys if key not in self.config]
+        if missing_keys:
+            raise ValueError(f"Missing required config keys: {', '.join(missing_keys)}")
+        self.print_log("Configuration validated successfully.")
+
     def authenticate(self):
+        client_id = os.getenv("POWER_BI_CLIENT_ID")
+        client_secret = os.getenv("POWER_BI_CLIENT_SECRET")
+
+        if not client_id or not client_secret:
+            raise ValueError("Missing Power BI client credentials.")
+        self.print_log("Power BI client credentials found.", status_code=4)
+        self.print_log("Authenticating with Power BI service...", status_code=4)
+        print(f"Client ID: {client_id}")
+        print(f"Client Secret: {'*' * len(client_secret)}")
         # Logic to authenticate with Power BI service
         self.print_log("Authenticating with Power BI service...")
         # Simulate authentication success
@@ -93,12 +109,17 @@ class PowerBIActions:
         # Logic to take ownership of a Power BI report
         self.print_log(f"Taking ownership of report {report_id} by {new_owner}")
 
-    def list_reports(self, workspace_id):
+    def list_reports(self):
+        workspace_id = self.config.get("workspace", "")
+        if not workspace_id:
+            raise ValueError("Workspace ID is missing in the configuration.")
         # Logic to list all reports in a Power BI workspace
         self.print_log(f"Listing reports in workspace {workspace_id}")
         return [{"report_id": "1", "name": "Report 1"}, {"report_id": "2", "name": "Report 2"}]
     
-    def update_parameters(self, report_id, parameters):
+    def update_parameters(self):
+        report_id = self.config.get("report_id", "test-report-id")
+        parameters = self.config.get("parameters", {"param1": "value1"})
         # Logic to update parameters of a Power BI report
         self.print_log(f"Updating parameters for report {report_id} with {parameters}")
 
@@ -107,8 +128,10 @@ class PowerBIActions:
         self.print_log("Updating Power BI gateways...")
         # Add your gateway update logic here
         self.print_log("Power BI gateways updated successfully.")
-        
-    def bind_to_gateway(self, dataset_id, gateway_id):
+
+    def bind_to_gateway(self):
+        dataset_id = self.config.get("dataset_id", "test-dataset-id")
+        gateway_id = self.config.get("gateway_id", "test-gateway-id")
         # Logic to bind a dataset to a Power BI gateway
         self.print_log(f"Binding dataset {dataset_id} to gateway {gateway_id}")
         # Add your binding logic here

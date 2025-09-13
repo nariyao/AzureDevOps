@@ -21,6 +21,9 @@ name: AzureDevOps-testing-pipeline
 jobs:
 - job: publish_reports
   displayName: Publish reports
+  variables:
+    POWER_BI_CLIENT_ID: "testing-client-id"
+    POWER_BI_CLIENT_SECRET: "testing-client-secret"
   steps:
   - checkout: self
   - script: |
@@ -34,6 +37,9 @@ jobs:
       power_bi = PowerBIActions(env='dev')
       power_bi.publish_report('reports')
       "
+    env:
+      POWER_BI_CLIENT_ID: $(POWER_BI_CLIENT_ID)
+      POWER_BI_CLIENT_SECRET: $(POWER_BI_CLIENT_SECRET)
     workingDirectory: $(Build.SourcesDirectory)/devops/scripts
     displayName: 'Publish Power BI Reports'
 
