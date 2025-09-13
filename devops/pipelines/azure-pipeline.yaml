@@ -23,17 +23,17 @@ jobs:
   - script: |
       echo "working directory: $(Build.SourcesDirectory)/devops/scripts"
     displayName: 'Show working directory'
-  - task: PythonScript@0
-    inputs:
-      scriptSource: 'inline'
-      script: |
-        import os
-        from main import PowerBIActions
-        power_bi = PowerBIActions(env="dev")
-        power_bi.authenticate()
-        power_bi.publish_report()
-    displayName: 'Publish Power BI Reports'
+  - script: |
+      python -c "
+      import os
+      from main import PowerBIActions
+      power_bi = PowerBIActions(env='dev')
+      power_bi.authenticate()
+      power_bi.publish_report()
+      "
     workingDirectory: $(Build.SourcesDirectory)/devops/scripts
+    displayName: 'Publish Power BI Reports'
+
 
 
 # Power BI Actions: Take over
