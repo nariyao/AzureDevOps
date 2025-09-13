@@ -8,7 +8,6 @@ pool: Nariyao
 jobs:
 - job: publish_reports
   displayName: Publish reports
-  workDirectory: $(Build.SourcesDirectory)/devops/scripts
   steps:
   - checkout: self
   - script: |
@@ -24,6 +23,7 @@ jobs:
         power_bi.authenticate()
         power_bi.publish_report()
     displayName: 'Publish Power BI Reports'
+    workDirectory: $(Build.SourcesDirectory)/devops/scripts
 
 
 # Power BI Actions: Take over
