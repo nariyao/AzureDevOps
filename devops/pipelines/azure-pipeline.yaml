@@ -1,6 +1,15 @@
 trigger: 
 - master
 
+parameters:
+  - name: environment
+    type: string
+    default: 'dev'
+    values:
+      - "dev"
+      - "qa"
+
+
 pool: Nariyao
 
 name: AzureDevOps-testing-pipeline
