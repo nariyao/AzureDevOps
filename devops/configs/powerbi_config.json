@@ -2,8 +2,8 @@
   "dev":{
     "workspace":"devops-dev",
     "gateway":"https://dev-gateway.example.com",
-    "reports_path": "/reports",
-    "paginated_reports_path": "/paginated-reports/dev",
+    "reports": "/reports",
+    "paginated_reports": "/paginated-reports/dev",
     "parameters": [
       {
         "server": "server",
@@ -18,8 +18,8 @@
   "qa":{
     "workspace":"devops-qa",
     "gateway":"https://qa-gateway.example.com",
-    "reports_path": "/reports",
-    "paginated_reports_path": "/paginated-reports/qa",
+    "reports": "/reports",
+    "paginated_reports": "/paginated-reports/qa",
     "parameters": [
       {
         "server": "server",

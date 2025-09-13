@@ -24,7 +24,7 @@ class PowerBIActions:
         self.authenticate()
 
     def validate_config(self):
-        required_keys = ["workspace", "report_id", "dataset_id", "gateway_id"]
+        required_keys = ["workspace", "reports", "paginated_reports", "gateway", "parameters"]
         missing_keys = [key for key in required_keys if key not in self.config]
         if missing_keys:
             raise ValueError(f"Missing required config keys: {', '.join(missing_keys)}")
@@ -92,30 +92,16 @@ class PowerBIActions:
             raise ValueError("Report path or workspace ID is missing in the configuration.")
         self.print_log(f"Report path: {report_path}, Workspace ID: {workspace_id}")
 
-    def refresh_dataset(self, dataset_id):
-        # Logic to refresh a Power BI dataset
-        self.print_log(f"Refreshing dataset with ID {dataset_id}")
-
-    def get_report_details(self, report_id):
-        # Logic to get details of a Power BI report
-        self.print_log(f"Getting details for report with ID {report_id}")
-        return {"report_id": report_id, "name": "Sample Report", "created_by": "User"}
+    def list_reports(self):
+        workspace_id = self.config.get("workspace", "")
+        # Logic to list all reports in a Power BI workspace
+        self.print_log(f"Listing reports in workspace {workspace_id}")
+        return [{"report_id": "1", "name": "Report 1"}, {"report_id": "2", "name": "Report 2"}]
     
-    def delete_report(self, report_id):
-        # Logic to delete a Power BI report
-        self.print_log(f"Deleting report with ID {report_id}")
-
     def take_ownership(self, report_id, new_owner):
         # Logic to take ownership of a Power BI report
         self.print_log(f"Taking ownership of report {report_id} by {new_owner}")
 
-    def list_reports(self):
-        workspace_id = self.config.get("workspace", "")
-        if not workspace_id:
-            raise ValueError("Workspace ID is missing in the configuration.")
-        # Logic to list all reports in a Power BI workspace
-        self.print_log(f"Listing reports in workspace {workspace_id}")
-        return [{"report_id": "1", "name": "Report 1"}, {"report_id": "2", "name": "Report 2"}]
     
     def update_parameters(self):
         report_id = self.config.get("report_id", "test-report-id")
