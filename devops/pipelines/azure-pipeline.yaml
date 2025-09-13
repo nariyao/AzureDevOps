@@ -27,7 +27,7 @@ jobs:
       echo "working directory: $(Build.SourcesDirectory)/devops/scripts"
     displayName: 'Show working directory'
   - script: |
-      python -c "
+      python3 -c "
       import os
       from main import PowerBIActions
       power_bi = PowerBIActions(env='dev')
