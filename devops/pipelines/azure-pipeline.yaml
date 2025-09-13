@@ -10,7 +10,10 @@ parameters:
       - "qa"
 
 
-pool: Nariyao
+pool:
+  name: Nariyao
+  demands:
+    - os -equals ubuntu-22.04
 
 name: AzureDevOps-testing-pipeline
 
