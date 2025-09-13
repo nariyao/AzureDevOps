@@ -92,3 +92,7 @@ jobs:
       "
     workingDirectory: $(Build.SourcesDirectory)/devops/scripts
     displayName: 'Publish Paginated Reports'
+  - script: |
+      python3 main.py --env=dev --reports=true --paginated_reports=true
+    workingDirectory: $(Build.SourcesDirectory)/devops/scripts
+    displayName: 'Run all Power BI actions'
