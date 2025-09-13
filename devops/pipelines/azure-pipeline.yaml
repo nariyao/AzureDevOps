@@ -1,13 +1,19 @@
-trigger: none
+trigger: 
+- master
 
 pool: Nariyao
 
 
-# Power BI Actions: Publish
+# Power BI Actions: Publishs
 jobs:
 - job: publish_reports
   displayName: Publish reports
+  workDirectory: $(Build.SourcesDirectory)/devops/scripts
   steps:
+  - checkout: self
+  - script: |
+      echo "working directory: $(Build.SourcesDirectory)/devops/scripts"
+    displayName: 'Show working directory'
   - task: PythonScript@0
     inputs:
       scriptSource: 'inline'
