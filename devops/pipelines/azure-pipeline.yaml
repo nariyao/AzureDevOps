@@ -78,7 +78,7 @@ jobs:
       python3 -c "
       from main import PowerBIActions
       power_bi = PowerBIActions(env='dev')
-      power_bi.binding_to_gateways()
+      power_bi.binding_to_gateway()
       "
     workingDirectory: $(Build.SourcesDirectory)/devops/scripts
     displayName: 'Binding to gateways'
@@ -88,7 +88,7 @@ jobs:
       python3 -c "
       from main import PowerBIActions
       power_bi = PowerBIActions(env='dev')
-      power_bi.publish_paginated_report()
+      power_bi.publish_report('paginated_reports')
       "
     workingDirectory: $(Build.SourcesDirectory)/devops/scripts
     displayName: 'Publish Paginated Reports'
