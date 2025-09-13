@@ -5,27 +5,44 @@ import os
 
 
 class PowerBIActions:
-    def __init__(self,env):
+    def print_log(self, message, status_code=0):
+        if status_code == 0:
+            print(f"INFO: {message}")
+        elif status_code == 1:
+            print(f"WARNING: {message}")
+        elif status_code == 2:
+            print(f"ERROR: {message}")
+        elif status_code == 3:
+            print(f"CRITICAL: {message}")
+        elif status_code == 4:
+            if os.getenv("DEBUG_MODE", "false").lower() == "true":
+                print(f"DEBUG: {message}")
+
+    def __init__(self, env):
         self.env = env
         self.config = self.get_config("../configs/powerbi_config.json")
         self.authenticate()
 
     def authenticate(self):
         # Logic to authenticate with Power BI service
-        print(f"Authenticating for environment: {self.env}")
+        self.print_log("Authenticating with Power BI service...")
         # Simulate authentication success
         return True
 
     def get_config(self, config_path=None):
         try:
-            if not config_path:
+            if config_path:
+                self.print_log(f"Using provided config path: {config_path}")
                 base_dir = os.path.dirname(os.path.abspath(__file__))
                 config_path = os.path.join(base_dir, config_path)
-
-            print(f"Reading configuration from {config_path}")
+            else:
+                raise ValueError("Configuration path must be provided.")
             
+            self.print_log(f"Reading configuration from {config_path}")
+
             with open(config_path, "r") as file:
                 try:
+                    self.print_log("Parsing JSON configuration...", status_code=4)
                     full_config = json.load(file)
                 except json.JSONDecodeError as e:
                     raise ValueError(f"Invalid JSON format in config file: {e}")
@@ -42,43 +59,57 @@ class PowerBIActions:
         except Exception as e:
             raise RuntimeError(f"Unexpected error while loading config: {e}")
 
-    def publish_report(self):
-        report_path = self.config.get("reports_path", "")
+    def publish_report(self, report_type="reports"):
+        report_path = self.config.get(report_type, "")
+        self.print_log(f"Publishing report from path: {report_path}")
+        if not report_path:
+            raise ValueError(f"Report path for type '{report_type}' is missing in the configuration.")
+        if not os.path.exists(report_path):
+            raise FileNotFoundError(f"Report path does not exist: {report_path}")
+        if not os.path.isdir(report_path):
+            raise NotADirectoryError(f"Report path is not a directory: {report_path}")
+        if not os.listdir(report_path):
+            self.print_log(f"Warning: Report directory is empty: {report_path}", status_code=1)
+            return
         workspace_id = self.config.get("workspace", "")
         if not report_path or not workspace_id:
             raise ValueError("Report path or workspace ID is missing in the configuration.")
-        print(f"Report path: {report_path}, Workspace ID: {workspace_id}")
+        self.print_log(f"Report path: {report_path}, Workspace ID: {workspace_id}")
 
     def refresh_dataset(self, dataset_id):
         # Logic to refresh a Power BI dataset
-        print(f"Refreshing dataset with ID {dataset_id}")
+        self.print_log(f"Refreshing dataset with ID {dataset_id}")
 
     def get_report_details(self, report_id):
         # Logic to get details of a Power BI report
-        print(f"Getting details for report with ID {report_id}")
+        self.print_log(f"Getting details for report with ID {report_id}")
         return {"report_id": report_id, "name": "Sample Report", "created_by": "User"}
     
     def delete_report(self, report_id):
         # Logic to delete a Power BI report
-        print(f"Deleting report with ID {report_id}")
+        self.print_log(f"Deleting report with ID {report_id}")
 
     def take_ownership(self, report_id, new_owner):
         # Logic to take ownership of a Power BI report
-        print(f"Taking ownership of report {report_id} by {new_owner}")
+        self.print_log(f"Taking ownership of report {report_id} by {new_owner}")
 
     def list_reports(self, workspace_id):
         # Logic to list all reports in a Power BI workspace
-        print(f"Listing reports in workspace {workspace_id}")
+        self.print_log(f"Listing reports in workspace {workspace_id}")
         return [{"report_id": "1", "name": "Report 1"}, {"report_id": "2", "name": "Report 2"}]
     
     def update_parameters(self, report_id, parameters):
         # Logic to update parameters of a Power BI report
-        print(f"Updating parameters for report {report_id} with {parameters}")
+        self.print_log(f"Updating parameters for report {report_id} with {parameters}")
 
+    def update_gateways(self):
+        # Logic to update Power BI gateways
+        self.print_log("Updating Power BI gateways...")
+        # Add your gateway update logic here
+        self.print_log("Power BI gateways updated successfully.")
+        
     def bind_to_gateway(self, dataset_id, gateway_id):
         # Logic to bind a dataset to a Power BI gateway
-        print(f"Binding dataset {dataset_id} to gateway {gateway_id}")
-
-    def bind_to_datasource(self, dataset_id, datasource_id):
-        # Logic to bind a dataset to a Power BI datasource
-        print(f"Binding dataset {dataset_id} to datasource {datasource_id}")
+        self.print_log(f"Binding dataset {dataset_id} to gateway {gateway_id}")
+        # Add your binding logic here
+        self.print_log(f"Dataset {dataset_id} successfully bound to gateway {gateway_id}")
