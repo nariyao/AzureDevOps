@@ -1,0 +1,56 @@
+trigger: none
+
+pool: Nariyao
+
+
+# Power BI Actions: Publish
+jobs:
+- job: publish_reports
+  displayName: Publish reports
+  steps:
+  - task: PythonScript@0
+    inputs:
+      scriptSource: 'inline'
+      script: |
+        import os
+        from main import PowerBIActions
+        power_bi = PowerBIActions(env="dev")
+        power_bi.authenticate()
+        power_bi.publish_report()
+    displayName: 'Publish Power BI Reports'
+
+
+# Power BI Actions: Take over
+- job: take_over_reports
+  displayName: Take over reports
+  dependsOn: publish_reports
+  steps:
+  - script: echo "Take over"
+    displayName: 'Run a one-line script'
+
+
+# Power BI Actions: Update parameters
+- job: update_parameters
+  displayName: Update parameters
+  dependsOn: take_over_reports
+  steps:
+  - script: echo "Update"
+    displayName: 'Run a one-line script'
+
+
+# Power BI Actions: Update gateways
+- job: update_gateways
+  displayName: Update gateways
+  dependsOn: update_parameters
+  steps:
+  - script: echo "Update gateways"
+    displayName: 'Run a one-line script'
+
+
+# Power BI Actions: Binding to gateways
+- job: binding_to_gateways
+  displayName: Binding to gateways
+  dependsOn: update_gateways
+  steps:
+  - script: echo "Binding to gateways"
+    displayName: 'Run a one-line script'
