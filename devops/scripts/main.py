@@ -98,12 +98,11 @@ class PowerBIActions:
         # Logic to list all reports in a Power BI workspace
         self.print_log(f"Listing reports in workspace {workspace_id}")
         return [{"report_id": "1", "name": "Report 1"}, {"report_id": "2", "name": "Report 2"}]
-    
-    def take_ownership(self, report_id, new_owner):
-        # Logic to take ownership of a Power BI report
-        self.print_log(f"Taking ownership of report {report_id} by {new_owner}")
 
-    
+    def take_ownership(self, all=True, report_id=None):
+        # Logic to take ownership of a Power BI report
+        self.print_log(f"Taking ownership of report {report_id}")
+
     def update_parameters(self):
         report_id = self.config.get("report_id", "test-report-id")
         parameters = self.config.get("parameters", {"param1": "value1"})

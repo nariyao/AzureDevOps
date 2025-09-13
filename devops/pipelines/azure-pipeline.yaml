@@ -15,7 +15,7 @@ pool:
   demands:
     - os -equals ubuntu-22.04
 
-name: AzureDevOps-testing-pipeline
+name: AzureDevOps-testing-pipeline-${{ parameters.environment }}
 
 # Power BI Actions: Publishs
 jobs:
@@ -48,7 +48,7 @@ jobs:
       python3 -c "
       from main import PowerBIActions
       power_bi = PowerBIActions(env='dev')
-      power_bi.take_over_report()
+      power_bi.take_ownership('1', 'new_owner@example.com')
       "
     workingDirectory: $(Build.SourcesDirectory)/devops/scripts
     displayName: "Take over reports"
