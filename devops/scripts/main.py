@@ -1,12 +1,13 @@
 # Power BI Actions
 
 import json
+import os
 
 
 class PowerBIActions:
     def __init__(self,env):
         self.env = env
-        self.config = self.get_config("../config/powerbi_config.json")
+        self.config = self.get_config("../configs/powerbi_config.json")
         self.authenticate()
 
     def authenticate(self):
@@ -19,8 +20,8 @@ class PowerBIActions:
         try:
             if not config_path:
                 base_dir = os.path.dirname(os.path.abspath(__file__))
-                config_path = os.path.join(base_dir, "../config/powerbi_config.json")
-            
+                config_path = os.path.join(base_dir, config_path)
+
             print(f"Reading configuration from {config_path}")
             
             with open(config_path, "r") as file:
