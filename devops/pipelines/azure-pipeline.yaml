@@ -78,7 +78,7 @@ jobs:
       python3 -c "
       from main import PowerBIActions
       power_bi = PowerBIActions(env='dev')
-      power_bi.binding_to_gateway()
+      power_bi.bind_to_gateway()
       "
     workingDirectory: $(Build.SourcesDirectory)/devops/scripts
     displayName: 'Binding to gateways'
