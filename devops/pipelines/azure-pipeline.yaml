@@ -19,8 +19,8 @@ name: AzureDevOps-testing-pipeline-${{ parameters.environment }}
 
 # Power BI Actions: Publishs
 jobs:
-- job: publish_reports
-  displayName: Publish reports
+- job: power_bi_actions
+  displayName: Power BI Actions
   variables:
     POWER_BI_CLIENT_ID: "testing-client-id"
     POWER_BI_CLIENT_SECRET: "testing-client-secret"
