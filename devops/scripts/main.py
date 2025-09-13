@@ -15,15 +15,31 @@ class PowerBIActions:
         # Simulate authentication success
         return True
 
-    def get_config(self, config_path):
-        # Logic to read configuration from a file
-        print(f"Reading configuration from {config_path}")
-        with open(config_path, "r") as file:
-            config = json.load(file).get(self.env, {})
-            if not config:
-                raise ValueError(f"No configuration found for environment: {self.env}")
-            print(f"Configuration loaded: {config}")
-        return config
+    def get_config(self, config_path=None):
+        try:
+            if not config_path:
+                base_dir = os.path.dirname(os.path.abspath(__file__))
+                config_path = os.path.join(base_dir, "../config/powerbi_config.json")
+            
+            print(f"Reading configuration from {config_path}")
+            
+            with open(config_path, "r") as file:
+                try:
+                    full_config = json.load(file)
+                except json.JSONDecodeError as e:
+                    raise ValueError(f"Invalid JSON format in config file: {e}")
+                
+                config = full_config.get(self.env, {})
+                if not config:
+                    raise ValueError(f"No configuration found for environment: {self.env}")
+                
+                print(f"Configuration loaded: {config}")
+                return config
+            
+        except FileNotFoundError:
+            raise FileNotFoundError(f"Configuration file not found at path: {config_path}")
+        except Exception as e:
+            raise RuntimeError(f"Unexpected error while loading config: {e}")
 
     def publish_report(self):
         report_path = self.config.get("reports_path", "")
